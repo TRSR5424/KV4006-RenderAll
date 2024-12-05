@@ -6,7 +6,6 @@ import traceback
 
 import yaml
 from jinja2 import Environment, FileSystemLoader, TemplateError
-from livereload import Server
 
 
 def load_data():
@@ -106,17 +105,3 @@ def render_all(trigger_file=None):
     data = load_data()
     render_all_templates(env, data, trigger_file)
 
-
-if __name__ == "__main__":
-    render_all()
-
-    server = Server()
-
-    # The *args bit here avoids some nasty errors when the watch triggers
-    # on a directory create/delete event.
-    server.watch("templates/**/*.j2", lambda path, *args: render_all(path))
-    server.watch("templates/**/*.jinja", lambda path, *args: render_all(path))
-    server.watch("templates/**/*.html", lambda path, *args: render_all(path))
-    server.watch("data/*.json", lambda path, *args: render_all(path))
-    server.watch("data/*.[yY][aA][mM][lL]", lambda path, *args: render_all(path))
-    server.serve(root="site")
