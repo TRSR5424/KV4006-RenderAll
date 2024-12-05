@@ -13,6 +13,10 @@ def exit_app():
     """Exit the application."""
     app.destroy()
 
+def clear_output():
+    """Clear the output box."""
+    output_message_box.clear()
+
 
 if __name__ == "__main__":
     version_string = f">>> {app_name} v{version}, {release_date}"
@@ -23,7 +27,7 @@ if __name__ == "__main__":
 
     button_box = Box(app)
     button = PushButton(button_box, align="left", command=exit_app, text="Quit", width=20, height=3)
-    button = PushButton(button_box, align="left", command=render_stop, text="Stop", width=20, height=3)
-    button = PushButton(button_box, align="left", command=render_all, text="Go!", width=20, height=3)
+    button = PushButton(button_box, align="left", command=clear_output, text="Clear Output", width=20, height=3)
+    # button = PushButton(button_box, align="left", command=render_all, text="Go!", width=20, height=3)
 
     app.display()
