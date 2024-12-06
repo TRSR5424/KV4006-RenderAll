@@ -112,17 +112,17 @@ def render_all(trigger_file=None):
 
 class ChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        rel_path = os.path.relpath(event.src_path)
+        rel_path = os.path.normpath(os.path.relpath(event.src_path))
         if rel_path.startswith("templates/") or rel_path.startswith("data/"):
             render_all(event.src_path)
 
     def on_created(self, event):
-        rel_path = os.path.relpath(event.src_path)
+        rel_path = os.path.normpath(os.path.relpath(event.src_path))
         if rel_path.startswith("templates/") or rel_path.startswith("data/"):
             render_all(event.src_path)
 
     def on_deleted(self, event):
-        rel_path = os.path.relpath(event.src_path)
+        rel_path = os.path.normpath(os.path.relpath(event.src_path))
         if rel_path.startswith("templates/") or rel_path.startswith("data/"):
             render_all(event.src_path)
 
