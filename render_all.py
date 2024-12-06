@@ -14,3 +14,5 @@ if __name__ == "__main__":
     server.watch("templates/**/*.html", lambda path, *args: render_all(path))
     server.watch("data/*.json", lambda path, *args: render_all(path))
     server.watch("data/*.[yY][aA][mM][lL]", lambda path, *args: render_all(path))
+
+    server.serve(root="site")

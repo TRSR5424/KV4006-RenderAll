@@ -63,9 +63,6 @@ def render_all_templates(env, data, trigger_file=None):
 
     if trigger_file:
         print(f">>> Rebuild triggered by change in: {trigger_file}")
-        if trigger_file.endswith(".html"):
-            copy_html_files()
-            return
 
     if not os.path.exists("site"):
         os.makedirs("site")
@@ -76,6 +73,8 @@ def render_all_templates(env, data, trigger_file=None):
         for f in glob.glob(os.path.join("templates", "**", "*.*"), recursive=True)
         if f.endswith((".j2", ".jinja")) and "partials" not in f
     ]
+
+    copy_html_files()
 
     for template_path in template_files:
         try:
