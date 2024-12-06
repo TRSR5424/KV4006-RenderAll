@@ -105,6 +105,9 @@ def render_all_templates(env, data, trigger_file=None):
 
 
 def render_all(trigger_file=None):
+    if isinstance(trigger_file, list):
+        trigger_file = trigger_file[0]
+    trigger_file = os.path.normpath(trigger_file) if trigger_file else None
     env = Environment(loader=FileSystemLoader("templates"))
     data = load_data()
     render_all_templates(env, data, trigger_file)
