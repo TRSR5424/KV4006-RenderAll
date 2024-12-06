@@ -9,3 +9,17 @@
 4. Run the 'render-all.py' file.
 
 
+## Nuitka build
+
+```
+uv add --dev nuitka
+uv run python -m nuitka --onefile render_all_lite.py
+```
+
+or
+
+```
+uv run python -m nuitka --standalone --macos-create-app-bundle render_all_lite.py
+```
+
+(actually better with the former, and using the .bin, I think.)

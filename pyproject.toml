@@ -10,3 +10,8 @@ dependencies = [
     "pyyaml>=6.0.2",
     "watchdog>=6.0.0",
 ]
+
+[dependency-groups]
+dev = [
+    "nuitka>=2.5.6",
+]

@@ -164,3 +164,10 @@ uv.lock
 .python-version
 
 site/*
+
+# Nuitka
+render_all_lite.app/
+render_all_lite.build/
+render_all_lite.dist/
+render_all_lite.onefile-build/
+render_all_lite.bin
