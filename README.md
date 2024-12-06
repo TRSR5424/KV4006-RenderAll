@@ -1,5 +1,7 @@
-# KV4006-Render
- Very basic static site generator, for KV4006 students are Northumbria University
+# KV4006-RenderAll
+Very basic static site generator, for KV4006 students at Northumbria University.
+
+There are many very good static site generators. This isn't one of them. Please seriously consider your life choices if you're thinking of using this beyond KV4006.
 
 ## How to run
 
@@ -23,3 +25,10 @@ uv run python -m nuitka --standalone --macos-create-app-bundle render_all_lite.p
 ```
 
 (actually better with the former, and using the .bin, I think.)
+
+On Windows, we need to target python 3.12, and build with mingw64
+
+```
+uv venv --python 3.12
+uv run --python 3.12 python -m nuitka --onefile --mingw64 render_all_lite.py
+```

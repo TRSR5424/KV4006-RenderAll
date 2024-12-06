@@ -3,6 +3,7 @@ import json
 import os
 import shutil
 import traceback
+import time
 
 import yaml
 from jinja2 import Environment, FileSystemLoader, TemplateError
@@ -79,7 +80,6 @@ def render_all_templates(env, data, trigger_file=None):
     for template_path in template_files:
         try:
             template_rel_path = os.path.relpath(template_path, "templates").replace(os.sep, "/")
-            print(f"Processing template: {template_rel_path}")
             template = env.get_template(template_rel_path)
             output = template.render(data)
             outname = os.path.join(
@@ -111,20 +111,37 @@ def render_all(trigger_file=None):
 
 
 class ChangeHandler(FileSystemEventHandler):
+    def __init__(self):
+        super().__init__()
+        self.last_event_time = 0
+        self.last_event_path = None
+        self.debounce_delay = 5  # seconds
+
+    def should_process_event(self, event_path):
+        current_time = time.time()
+        if (self.last_event_path != event_path) or (current_time - self.last_event_time > self.debounce_delay):
+            self.last_event_time = current_time
+            self.last_event_path = event_path
+            return True
+        return False
+
     def on_modified(self, event):
-        rel_path = os.path.normpath(os.path.relpath(event.src_path))
-        if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
-            render_all(event.src_path)
+        if self.should_process_event(event.src_path):
+            rel_path = os.path.normpath(os.path.relpath(event.src_path))
+            if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
+                render_all(event.src_path)
 
     def on_created(self, event):
-        rel_path = os.path.normpath(os.path.relpath(event.src_path))
-        if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
-            render_all(event.src_path)
+        if self.should_process_event(event.src_path):
+            rel_path = os.path.normpath(os.path.relpath(event.src_path))
+            if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
+                render_all(event.src_path)
 
     def on_deleted(self, event):
-        rel_path = os.path.normpath(os.path.relpath(event.src_path))
-        if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
-            render_all(event.src_path)
+        if self.should_process_event(event.src_path):
+            rel_path = os.path.normpath(os.path.relpath(event.src_path))
+            if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
+                render_all(event.src_path)
 
 
 if __name__ == "__main__":
