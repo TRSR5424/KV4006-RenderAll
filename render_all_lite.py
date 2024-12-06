@@ -61,8 +61,6 @@ def render_all_templates(env, data, trigger_file=None):
     """Render all templates, excluding partials."""
 
     if trigger_file:
-        if isinstance(trigger_file, list):
-            trigger_file = trigger_file[0]
         print(f">>> Rebuild triggered by change in: {trigger_file}")
         if trigger_file.endswith(".html"):
             copy_html_files()
@@ -74,17 +72,19 @@ def render_all_templates(env, data, trigger_file=None):
     # Collect templates from templates/ directory, excluding partials
     template_files = [
         f
-        for f in glob.glob("templates/**/*.*", recursive=True)
+        for f in glob.glob(os.path.join("templates", "**", "*.*"), recursive=True)
         if f.endswith((".j2", ".jinja")) and "partials" not in f
     ]
 
     for template_path in template_files:
         try:
-            template = env.get_template(os.path.relpath(template_path, "templates"))
+            template_rel_path = os.path.relpath(template_path, "templates").replace(os.sep, "/")
+            print(f"Processing template: {template_rel_path}")
+            template = env.get_template(template_rel_path)
             output = template.render(data)
             outname = os.path.join(
                 "site",
-                os.path.relpath(template_path, "templates")
+                os.path.normpath(template_rel_path)
                 .replace(".html.j2", ".html")
                 .replace(".j2", ".html")
                 .replace(".html.jinja", ".html")
@@ -113,17 +113,17 @@ def render_all(trigger_file=None):
 class ChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
         rel_path = os.path.normpath(os.path.relpath(event.src_path))
-        if rel_path.startswith("templates/") or rel_path.startswith("data/"):
+        if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
             render_all(event.src_path)
 
     def on_created(self, event):
         rel_path = os.path.normpath(os.path.relpath(event.src_path))
-        if rel_path.startswith("templates/") or rel_path.startswith("data/"):
+        if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
             render_all(event.src_path)
 
     def on_deleted(self, event):
         rel_path = os.path.normpath(os.path.relpath(event.src_path))
-        if rel_path.startswith("templates/") or rel_path.startswith("data/"):
+        if rel_path.startswith(os.path.normpath("templates" + os.sep)) or rel_path.startswith(os.path.normpath("data" + os.sep)):
             render_all(event.src_path)
 
 
