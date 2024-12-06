@@ -89,31 +89,24 @@ def render_all_templates(env, data, trigger_file=None):
             traceback.print_exc()
 
 def render_all(trigger_file=None):
-    print(f'Calling render_all with trigger_file: {trigger_file}')
     env = Environment(loader=FileSystemLoader('templates'))
     data = load_data()
     render_all_templates(env, data, trigger_file)
 
 class ChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        print(f'Modified: {event.src_path}')
         rel_path = os.path.relpath(event.src_path)
         if rel_path.startswith('templates/') or rel_path.startswith('data/'):
-            print(f'Triggering render_all for modified file: {event.src_path}')
             render_all(event.src_path)
 
     def on_created(self, event):
-        print(f'Created: {event.src_path}')
         rel_path = os.path.relpath(event.src_path)
         if rel_path.startswith('templates/') or rel_path.startswith('data/'):
-            print(f'Triggering render_all for created file: {event.src_path}')
             render_all(event.src_path)
 
     def on_deleted(self, event):
-        print(f'Deleted: {event.src_path}')
         rel_path = os.path.relpath(event.src_path)
         if rel_path.startswith('templates/') or rel_path.startswith('data/'):
-            print(f'Triggering render_all for deleted file: {event.src_path}')
             render_all(event.src_path)
 
 if __name__ == "__main__":
