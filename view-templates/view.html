@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View File - {{ file }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .source {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        {{ css }}
+    </style>
+</head>
+<body>
+    <h1>Viewing: {{ file }}</h1>
+    <div class="source">
+        {{ code|safe }}
+    </div>
+    <p><a href="/">Back to file list</a></p>
+</body>
+</html>

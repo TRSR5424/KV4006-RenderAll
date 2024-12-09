@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .file-list {
+            width: 30%;
+            float: left;
+        }
+        .file-viewer {
+            width: 70%;
+            float: left;
+        }
+        .source {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Template Viewer</h1>
+    <div class="file-list">
+        <h2>Files</h2>
+        <ul>
+            {% for dir, files in files.items() %}
+                <li>{{ dir if dir else 'Root' }}
+                    <ul>
+                        {% for file in files %}
+                            <li><a href="#" onclick="viewFile('{{ dir }}/{{ file }}')">{{ file }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="file-viewer">
+        <h2 id="file-viewer-heading">File Viewer</h2>
+        <div id="file-content">
+            <p>Select a file to view its content.</p>
+        </div>
+    </div>
+    <script>
+        function viewFile(file) {
+            // Handle root directory files
+            if (file.startsWith('/')) {
+                file = file.substring(1);
+            }
+            fetch(`/view?file=${encodeURIComponent(file)}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('file-viewer-heading').innerText = `Viewing: ${file}`;
+                    document.getElementById('file-content').innerHTML = `<style>${data.css}</style><div class="source">${data.code}</div>`;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
