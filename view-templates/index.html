@@ -32,7 +32,14 @@
                 <li>{{ dir if dir else 'Root' }}
                     <ul>
                         {% for file in files %}
-                            <li><a href="#" onclick="viewFile('{{ dir }}/{{ file }}')">{{ file }}</a></li>
+                            <li>
+                                <a href="#" onclick="viewFile('{{ dir }}/{{ file.name }}')">{{ file.name }}</a>
+                                <ul>
+                                    <li>Extends: {{ file.extends if file.extends else 'None' }}</li>
+                                    <li>Includes: {{ file.includes }}</li>
+                                    <li>Macros: {{ file.macros }}</li>
+                                </ul>
+                            </li>
                         {% endfor %}
                     </ul>
                 </li>
