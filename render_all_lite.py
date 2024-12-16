@@ -69,11 +69,24 @@ def copy_html_files():
             traceback.print_exc()
 
 
+def copy_img_files():
+    """Copy the entire templates/img/ directory to site/img/."""
+
+    src_dir = "templates/img"
+    dest_dir = "site/img"
+
+    # Ensure the output path exists
+    if os.path.exists(dest_dir):
+        shutil.rmtree(dest_dir)
+    shutil.copytree(src_dir, dest_dir)
+    print(f"Copied {src_dir} to {dest_dir}")
+
+
 def render_all_templates(env, data, trigger_file=None):
     """Render all templates, excluding partials."""
 
     # If a trigger file is provided, note which one caused the rebuild.
-    # We're going  to rebuild everything anyway, but this is useful context for the user.
+    # We're going to rebuild everything anyway, but this is useful context for the user.
     if trigger_file:
         print(f">>> Rebuild triggered by change in: {trigger_file}")
 
@@ -136,6 +149,7 @@ def render_all(trigger_file=None):
     env = Environment(loader=FileSystemLoader("templates"))
     data = load_data()
     render_all_templates(env, data, trigger_file)
+    copy_img_files()
 
 
 class ChangeHandler(FileSystemEventHandler):

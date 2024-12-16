@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # Set up the livereload server
     server = Server()
 
-    # Watch for changes in the templates/ and data/ directories.
+    # Watch for changes in the templates/, data/, and img/ directories.
     # The *args bit here avoids some nasty errors when the watch triggers
     # on a directory create/delete event.
     server.watch("templates/**/*.j2", lambda path, *args: render_all(path))
@@ -17,6 +17,7 @@ if __name__ == "__main__":
     server.watch("templates/**/*.html", lambda path, *args: render_all(path))
     server.watch("data/*.json", lambda path, *args: render_all(path))
     server.watch("data/*.[yY][aA][mM][lL]", lambda path, *args: render_all(path))
+    server.watch("img/**/*.*", lambda path, *args: render_all(path))
 
     # Serve the site/ directory at http://127.0.0.1:5500
     server.serve(root="site")
