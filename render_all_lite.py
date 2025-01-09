@@ -96,7 +96,7 @@ def copy_css_files():
             traceback.print_exc()
             
 def copy_img_files():
-    """Copy all commmon image files used in websites from templates/ to site/ without parsing them."""
+    """Copy image files used in websites from templates/ to site/ without parsing them."""
     
     img_types = ["apng", "png", "avif", "gif", "jpg", "jpeg", "jfif", ".pjpeg", "pjp", "svg", "webp", "bmp", "ico", "cur", "tif", "tiff"]
 
@@ -104,7 +104,7 @@ def copy_img_files():
     if not os.path.exists("site"):
         os.makedirs("site")
 
-    # Walk the templates directory and copy all .css files
+    # Walk the templates directory and copy all common image files
     for img_type in img_types:
         # Much of what's here is to fudge around path inconsistencies between
         # Windows and Unix-like systems
