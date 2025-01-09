@@ -10,6 +10,11 @@ There are many very good static site generators. This isn't one of them. Please 
 3. Populate the virtual environment.
 4. Run the 'render-all.py' file.
 
+## HELP MY IMAGES AREN'T LOADING
+1. Open "render_all_lite" file
+2. Go to line 101
+3. If the file extenstion for your image isn't there add it to the list
+
 
 ## Nuitka build
 
